@@ -3,16 +3,18 @@ package sap43.fooddelivery.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@MappedSuperclass
+@Entity
+@Data
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "role", discriminatorType = DiscriminatorType.STRING)
 public abstract class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String username;
     private String password;
-    private String role; // CUSTOMER, EMPLOYEE, SUPPLIER
+    private String email;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 }

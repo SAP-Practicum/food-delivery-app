@@ -6,20 +6,23 @@ import java.util.List;
 
 @Entity
 @Table(name = "orders")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String status; // PLACED, PROCESSING, DELIVERED
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderItem> items;
+    @ManyToOne
+    @JoinColumn(name = "supplier_id")
+    private Supplier supplier;
+
+    @OneToMany
+    private List<Product> items;
+    @Enumerated(EnumType.STRING)
+    private Status status;
 }
+

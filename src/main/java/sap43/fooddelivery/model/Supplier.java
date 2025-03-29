@@ -5,12 +5,10 @@ import lombok.*;
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 public class Supplier extends User {
     @OneToMany(mappedBy = "supplier")
-    private List<Delivery> deliveries;
+    private List<Order> orders;
 
     private double totalEarnings;
 }

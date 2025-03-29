@@ -5,10 +5,7 @@ import lombok.*;
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 public class Restaurant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -4,17 +4,15 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private double price;
-    private String category;
+    @Enumerated(EnumType.STRING)
+    private Category category;
 
     @ManyToOne
     @JoinColumn(name = "restaurant_id")
