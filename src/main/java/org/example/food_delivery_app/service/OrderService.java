@@ -101,8 +101,32 @@ public class OrderService {
                  .filter(order -> order.getStatus() == OrderStatus.DELIVERED)
                  .mapToDouble(Order::getTotalPrice)
                  .sum();
-
-
     }
 
+    public void preparingOrder(Long orderId){
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(()-> new RuntimeException("Order not found"));
+
+        if(order.getStatus() != OrderStatus.PENDING){
+            throw new RuntimeException("Order is not accepted to be preparing");
+        }
+        order.setStatus(OrderStatus.PREPARING);
+        orderRepository.save(order);
+    }
+
+    public void cancelOrder(Long orderId){
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(()-> new RuntimeException("Order not found"));
+
+        if(order.getStatus() != OrderStatus.PENDING){
+            throw new IllegalStateException("Order is already accepted or cancelled");
+        }
+
+        order.setStatus(OrderStatus.CANCELLED);
+        orderRepository.save(order);
+    }
+
+    public List<Order> getPendingOrdersByRestaurantId(Long restaurantId){
+        return orderRepository.findPendingOrdersByRestaurantId(restaurantId);
+    }
 }

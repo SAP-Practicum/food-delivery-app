@@ -27,5 +27,14 @@ and o.createdDate between :startDate and :endDate
                             @Param("startDate") LocalDateTime startDate,
                             @Param("endDate") LocalDateTime endDate);
 
+    @Query("""
+select o
+from Order o
+join o.products p 
+where p.restaurant.id = :restaurantId 
+and o.status = 'PENDING'
+""")
+    List<Order> findPendingOrdersByRestaurantId(@Param("restaurantId") long restaurantId);
+
 }
 
