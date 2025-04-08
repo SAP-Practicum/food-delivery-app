@@ -30,8 +30,8 @@ and o.createdDate between :startDate and :endDate
     @Query("""
 select o
 from Order o
-join o.products p 
-where p.restaurant.id = :restaurantId 
+join o.products p
+where p.restaurant.id = :restaurantId
 and o.status = 'PENDING'
 """)
     List<Order> findPendingOrdersByRestaurantId(@Param("restaurantId") long restaurantId);
