@@ -24,6 +24,7 @@ public class SettingsService {
             System.out.println("Settings saved");
         }
     }
+
     public Settings getSettings(){
         return settingsRepository.findFirstByOrderByIdAsc();
     }
