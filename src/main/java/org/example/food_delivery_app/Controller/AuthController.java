@@ -97,4 +97,9 @@ public class AuthController {
         deliveryRepository.save(delivery);
         return ResponseEntity.ok("Delivery registered successfully");
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout() {
+        return ResponseEntity.ok("Logged out. Please delete token on client side.");
+    }
 }

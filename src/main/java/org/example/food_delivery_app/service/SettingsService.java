@@ -30,7 +30,7 @@ public class SettingsService {
 
     public Settings updateSettings(double bonusPercentage, double bonusThreshold){
         Settings settings = getSettings();
-        if(settings ==null){
+        if(settings == null){
             settings = new Settings();
         }
 
