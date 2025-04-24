@@ -13,12 +13,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
-public class AuthController {
+public class   AuthController {
 
     private final AuthenticationManager authenticationManager;
 
@@ -96,5 +95,10 @@ public class AuthController {
         delivery.setRole(Role.DELIVERY);
         deliveryRepository.save(delivery);
         return ResponseEntity.ok("Delivery registered successfully");
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout() {
+        return ResponseEntity.ok("Logged out. Please delete token on client side.");
     }
 }

@@ -85,4 +85,22 @@ public class OrderController {
         double earnings = orderService.getEarningsForDelivery(deliveryId, startDate, endDate);
         return ResponseEntity.ok(earnings);
     }
+
+    @PostMapping("/preparing/{orderId}")
+    public ResponseEntity<String> prepareOrder(@PathVariable Long orderId){
+        orderService.preparingOrder(orderId);
+        return ResponseEntity.ok("Order prepared successfully");
+    }
+
+    @PostMapping("/cancel/{orderId}")
+    public ResponseEntity<String> cancelOrder(@PathVariable Long orderId){
+        orderService.cancelOrder(orderId);
+        return ResponseEntity.ok("Order cancelled successfully");
+    }
+
+    @GetMapping("/pending/{restaurantId}")
+    public ResponseEntity<List<Order>> getPendingOrdersByRestaurantId(@PathVariable Long restaurantId){
+        List<Order> pendingOrders = orderService.getPendingOrdersByRestaurantId(restaurantId);
+        return ResponseEntity.ok(pendingOrders);
+    }
 }
