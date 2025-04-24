@@ -1,9 +1,8 @@
-package org.example.food_delivery_app.Service;
+package org.example.food_delivery_app.service;
 
 
 import org.example.food_delivery_app.model.*;
 import org.example.food_delivery_app.repository.UserRepository;
-import org.example.food_delivery_app.service.UserDetailsServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
