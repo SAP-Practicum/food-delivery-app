@@ -57,7 +57,7 @@ public class DeliveryService {
 
             if (totalEarnings >= settings.getBonusThreshold()){
                 double bonus = totalEarnings *(settings.getBonusPercentage()/100);
-                System.out.println("Delivery Id "+ delivery.getId() + " earned bonus" + bonus);
+                System.out.println("deliveryman with id "+ delivery.getId() + " earned bonus " + bonus);
             }
         }
     }
