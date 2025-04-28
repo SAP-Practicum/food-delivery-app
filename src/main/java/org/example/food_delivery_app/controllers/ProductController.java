@@ -1,4 +1,4 @@
-package org.example.food_delivery_app.Controller;
+package org.example.food_delivery_app.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +42,7 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    private ResponseEntity<Product> updateProduct(
+    ResponseEntity<Product> updateProduct(
             @PathVariable Long id,
             @Valid @RequestBody Product productDetails){
         Product updatedProduct = productService.updateProduct(id,productDetails);

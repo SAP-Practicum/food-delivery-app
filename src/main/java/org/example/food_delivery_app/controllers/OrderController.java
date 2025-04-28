@@ -1,4 +1,4 @@
-package org.example.food_delivery_app.Controller;
+package org.example.food_delivery_app.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.example.food_delivery_app.model.Order;
@@ -68,7 +68,7 @@ public class OrderController {
     }
 
     @GetMapping("/track/{orderId}")
-    private ResponseEntity<OrderStatus> trackOrder(
+    ResponseEntity<OrderStatus> trackOrder(
             @PathVariable Long orderId,
             @RequestParam Long customerId
     ){

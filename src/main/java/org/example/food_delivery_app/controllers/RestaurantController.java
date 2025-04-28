@@ -1,4 +1,4 @@
-package org.example.food_delivery_app.Controller;
+package org.example.food_delivery_app.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
