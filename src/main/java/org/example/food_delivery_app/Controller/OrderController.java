@@ -6,6 +6,7 @@ import org.example.food_delivery_app.model.OrderStatus;
 import org.example.food_delivery_app.service.OrderService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -20,6 +21,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @GetMapping("/revenue")
+    @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<Double> getRestaurantRevenue(
           @RequestParam Long restaurantId,
           @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
@@ -30,6 +32,7 @@ public class OrderController {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<Order> createOrder(
             @RequestParam Long customerId,
             @RequestBody List<Long> productIds
@@ -39,6 +42,7 @@ public class OrderController {
     }
 
     @GetMapping("/customer/{customerId}")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<List<Order>> getOrdersByCustomerId(@PathVariable Long customerId){
         List<Order> orders = orderService.getOrdersByCustomerId(customerId);
         return ResponseEntity.ok(orders);
@@ -50,6 +54,7 @@ public class OrderController {
     }
 
     @PostMapping("/accept/{orderId}")
+    @PreAuthorize("hasRole('DELIVERY')")
     public ResponseEntity<String> acceptOrder(
             @PathVariable Long orderId,
             @RequestParam Long deliveryId
@@ -59,6 +64,7 @@ public class OrderController {
     }
 
     @PutMapping("/delivered/{orderId}")
+    @PreAuthorize("hasRole('DELIVERY')")
     public ResponseEntity<String> updateOrderStatus(
             @PathVariable Long orderId,
             @RequestParam Long deliveryId
@@ -68,6 +74,7 @@ public class OrderController {
     }
 
     @GetMapping("/track/{orderId}")
+    @PreAuthorize("hasRole('CUSTOMER')")
     private ResponseEntity<OrderStatus> trackOrder(
             @PathVariable Long orderId,
             @RequestParam Long customerId
@@ -77,6 +84,7 @@ public class OrderController {
     }
 
     @GetMapping("/earnings/{deliveryId}")
+    @PreAuthorize("hasAnyRole('EMPLOYEE','DELIVERY')")
     public ResponseEntity<Double> getEarningsForDelivery(
             @PathVariable Long deliveryId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
@@ -87,18 +95,21 @@ public class OrderController {
     }
 
     @PostMapping("/preparing/{orderId}")
+    @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<String> prepareOrder(@PathVariable Long orderId){
         orderService.preparingOrder(orderId);
         return ResponseEntity.ok("Order prepared successfully");
     }
 
     @PostMapping("/cancel/{orderId}")
+    @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<String> cancelOrder(@PathVariable Long orderId){
         orderService.cancelOrder(orderId);
         return ResponseEntity.ok("Order cancelled successfully");
     }
 
     @GetMapping("/pending/{restaurantId}")
+    @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<List<Order>> getPendingOrdersByRestaurantId(@PathVariable Long restaurantId){
         List<Order> pendingOrders = orderService.getPendingOrdersByRestaurantId(restaurantId);
         return ResponseEntity.ok(pendingOrders);
