@@ -25,12 +25,13 @@ public class JwtUtils {
     private int jwtExpirationMs;
 
     public String generateToken(Authentication authentication) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        User user = (User) userDetails;
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        User user = userDetails.getUser();
 
         Map<String, Object> claims = new HashMap<>();
         claims.put("email", user.getEmail());
         claims.put("roles", user.getRole().name());
+        claims.put("user_id", user.getId());
 
         SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
 

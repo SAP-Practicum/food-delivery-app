@@ -4,6 +4,7 @@ package org.example.food_delivery_app.service;
 import lombok.RequiredArgsConstructor;
 import org.example.food_delivery_app.model.User;
 import org.example.food_delivery_app.repository.UserRepository;
+import org.example.food_delivery_app.security.CustomUserDetails;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -27,11 +28,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found with email: " + email));
 
-        return new org.springframework.security.core.userdetails.User(
-                user.getEmail(),
-                user.getPassword(),
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_"+user.getRole().name()))
-        );
+        return new CustomUserDetails(user);
     }
 
 }
