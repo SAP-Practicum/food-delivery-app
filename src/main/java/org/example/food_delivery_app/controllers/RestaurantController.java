@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.food_delivery_app.model.Restaurant;
 import org.example.food_delivery_app.service.RestaurantService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class RestaurantController {
     private final RestaurantService restaurantService;
 
     @PostMapping
+    @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<Restaurant> createRestaurant(@RequestBody Restaurant restaurant){
         return ResponseEntity.ok(restaurantService.save(restaurant));
     }
@@ -33,12 +35,14 @@ public class RestaurantController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<Void> deleteRestaurant(@PathVariable Long id){
         restaurantService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<Restaurant> updateRestaurant(
             @PathVariable Long id,
             @Valid @RequestBody Restaurant restaurantDetails){
