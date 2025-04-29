@@ -9,6 +9,7 @@ import org.example.food_delivery_app.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -32,13 +33,28 @@ public class OrderService {
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new RuntimeException("Customer not found"));
 
-        List<Product> products = productRepository.findAllById(productIds);
+        Map<Long,Long> productIdToQuantity = productIds.stream()
+                .collect(Collectors.groupingBy(p -> p, Collectors.counting()));
 
-        double totalPrice = products.stream().mapToDouble(Product::getPrice).sum();
+        List<Product> finalProductList = new ArrayList<>();
+        double totalPrice = 0;
+
+        for(Map.Entry<Long,Long> entry : productIdToQuantity.entrySet()){
+            Long productId = entry.getKey();
+            int quantity = entry.getValue().intValue();
+
+            Product product = productRepository.findById(productId)
+                    .orElseThrow(() -> new RuntimeException("Product not found"));
+
+            for(int i = 0;i<quantity;i++){
+                finalProductList.add(product);
+            }
+            totalPrice += product.getPrice();
+        }
 
         Order order = new Order();
         order.setCustomer(customer);
-        order.setProducts(products);
+        order.setProducts(finalProductList);
         order.setTotalPrice(totalPrice);
         order.setCreatedDate(LocalDateTime.now());
         order.setStatus(OrderStatus.PENDING);
