@@ -15,7 +15,7 @@ public class ScheduledTasks {
 
     private final DeliveryService deliveryService;
 
-    @Scheduled(cron = "0 * * * * ?")
+    @Scheduled(cron = "0 0 0 1 * *")
     public void checkMonthlyEarningsAndApplyBonus(){
 
         System.out.println("Applying monthly bonuses to eligible deliveries...");
