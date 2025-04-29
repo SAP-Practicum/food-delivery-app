@@ -1,7 +1,5 @@
 package org.example.food_delivery_app.security;
 
-import lombok.Data;
-import lombok.Getter;
 import org.example.food_delivery_app.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

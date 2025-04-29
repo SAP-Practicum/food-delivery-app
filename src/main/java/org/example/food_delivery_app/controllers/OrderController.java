@@ -2,7 +2,7 @@ package org.example.food_delivery_app.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.example.food_delivery_app.model.Order;
-import org.example.food_delivery_app.model.OrderStatus;
+import org.example.food_delivery_app.model.OrderSummaryDTO;
 import org.example.food_delivery_app.service.OrderService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -68,11 +68,11 @@ public class OrderController {
     }
 
     @GetMapping("/track/{orderId}")
-    ResponseEntity<OrderStatus> trackOrder(
+    ResponseEntity<OrderSummaryDTO> trackOrder(
             @PathVariable Long orderId,
             @RequestParam Long customerId
     ){
-        OrderStatus status = orderService.getOrderStatus(orderId, customerId);
+        OrderSummaryDTO status = orderService.getOrderStatus(orderId, customerId);
         return ResponseEntity.ok(status);
     }
 
