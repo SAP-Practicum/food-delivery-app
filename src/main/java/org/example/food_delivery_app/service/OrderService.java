@@ -101,14 +101,39 @@ public class OrderService {
         orderRepository.save(order);
     }
 
-    public OrderStatus getOrderStatus(Long orderId, Long customerId){
+    public OrderSummaryDTO getOrderStatus(Long orderId, Long customerId){
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(()-> new RuntimeException("Order not found"));
 
         if(!order.getCustomer().getId().equals(customerId)){
             throw new RuntimeException("this customer does not own the owner");
         }
-        return order.getStatus();
+
+        List<Product> products = order.getProducts();
+
+        Map<Product,Long> productCountMap = products.stream()
+                .collect(Collectors.groupingBy(p -> p, Collectors.counting()));
+
+        List<OrderProductInfoDTO> productInfoList = productCountMap.entrySet().stream()
+                .map(entry ->{
+                    Product product = entry.getKey();
+                    int quantity = entry.getValue().intValue();
+                    double totalProductPrice = product.getPrice() * quantity;
+
+                    return new OrderProductInfoDTO(
+                            product.getName(),
+                            product.getPrice(),
+                            quantity,
+                            totalProductPrice
+                    );
+                }).toList();
+
+        double totalOrderPrice = productInfoList.stream()
+                .mapToDouble(OrderProductInfoDTO::getTotalPrice)
+                .sum();
+
+        return new OrderSummaryDTO(productInfoList,totalOrderPrice,order.getStatus());
+
     }
 
     public double getEarningsForDelivery(Long deliveryId, LocalDateTime startDate,LocalDateTime endDate){
