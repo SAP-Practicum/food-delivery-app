@@ -10,8 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +19,6 @@ public class OrderService {
     private final CustomerRepository customerRepository;
     private final ProductRepository productRepository;
     private final DeliveryRepository deliveryRepository;
-
 
     public Double getRestaurantRevenue(Long restaurantId, LocalDateTime startDate, LocalDateTime endDate) {
         Double revenue = orderRepository.calculateRevenue(restaurantId, startDate, endDate);
@@ -86,45 +83,14 @@ public class OrderService {
         orderRepository.save(order);
     }
 
-    public OrderSummaryDTO getOrderStatus(Long orderId, Long customerId){
+    public OrderStatus getOrderStatus(Long orderId, Long customerId){
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(()-> new RuntimeException("Order not found"));
 
-       try{
-           Order order = orderRepository.findById(orderId)
-                   .orElseThrow(()-> new RuntimeException("Order not found"));
-
-           if(!order.getCustomer().getId().equals(customerId)){
-               throw new RuntimeException("this customer does not own the owner");
-           }
-
-           List<Product> products = order.getProducts();
-
-           Map<Product, Long> productCountMap = products.stream().collect(
-                   Collectors.groupingBy(p-> p, Collectors.counting())
-           );
-
-           List<OrderProductInfoDTO> productInfoList = productCountMap.entrySet().stream().map(
-                   entry ->{
-                       Product product = entry.getKey();
-                       int quantity = entry.getValue().intValue();
-                       double totalProductPrice = product.getPrice() * quantity;
-
-                       return new OrderProductInfoDTO(
-                               product.getName(),
-                               product.getPrice(),
-                               quantity,
-                               totalProductPrice
-                       );
-                   }
-           ).toList();
-
-           double totalOrderPrice = productInfoList.stream()
-                   .mapToDouble(OrderProductInfoDTO::getTotalProductPrice).sum();
-
-           return new OrderSummaryDTO(productInfoList,totalOrderPrice,order.getStatus());
-
-       }catch (Exception e){
-        throw new RuntimeException(e);
-       }
+        if(!order.getCustomer().getId().equals(customerId)){
+            throw new RuntimeException("this customer does not own the owner");
+        }
+        return order.getStatus();
     }
 
     public double getEarningsForDelivery(Long deliveryId, LocalDateTime startDate,LocalDateTime endDate){

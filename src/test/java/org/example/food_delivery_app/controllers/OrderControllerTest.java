@@ -102,7 +102,12 @@ class OrderControllerTest {
 
     @Test
     void trackOrder_shouldReturnOrderStatus() {
+        when(orderService.getOrderStatus(1L, 2L)).thenReturn(OrderStatus.DELIVERED);
 
+        ResponseEntity<OrderStatus> response = orderController.trackOrder(1L, 2L);
+
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(OrderStatus.DELIVERED, response.getBody());
     }
 
     @Test
