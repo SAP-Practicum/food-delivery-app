@@ -48,7 +48,7 @@ public class OrderService {
             for(int i = 0;i<quantity;i++){
                 finalProductList.add(product);
             }
-            totalPrice += product.getPrice();
+            totalPrice += product.getPrice()*quantity;
         }
 
         Order order = new Order();
